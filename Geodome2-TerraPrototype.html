@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Geodome 2 - Terra Prototype</title>
+
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background-color: black;
+  color: white;
+}
+
+.light-row {
+  display: flex;
+}
+
+.light-box {
+  height: 200px;
+  width: 200px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.light {
+  display: block;
+  margin: auto;
+  border-radius: 50%;
+}
+
+.light-off {
+  height: 15px;
+  width: 15px;
+  background-color: grey;
+}
+
+.light-on {
+  border: 0;
+  height: 200px;
+  width: 200px;
+  background-image: url("https://static.wixstatic.com/media/bb5212_7a151ffa75dd47dfaa46bb9836c182b0~mv2.png");
+  background-size: 350px 350px;
+  background-position: center center;
+}
+
+.clickSignal {
+  border: 5px solid red;
+  height: 25px !important;
+  width: 25px !important;
+}
+
+</style>
+
+</head>
+<body>
+
+<h1>Biosphere 2</h1>
+<h3>Game Prototype: Introduction & Level 1</h3>
+
+<br>
+<div style="position: fixed; width:100%; height:100%; top: 0; background-color:black; opacity: 90%;">
+  <div style="right:50%; position:fixed; top:20%;text-align: center;">
+    <h1 >Biosphere 2</h1>
+    <h3>Game Prototype: Introduction & Level 1</h3>
+    <a onclick="startGame(this)">
+      <img src="https://static.wixstatic.com/media/bb5212_429c30713b5f43209b71b9f12fee2d86~mv2.jpg" width="200px" height:"200px">
+    </a>
+  </div>
+</div>
+
+<div id="winner" style="display:none; position: fixed; width:100%; height:100%; top: 0; background-color:white; color: black; opacity: 90%;">
+  <div style="right:50%; position:fixed; top:20%;text-align: center;">
+    <h1 >Biosphere 2</h1>
+    <h3>Game Prototype: Introduction & Level 1</h3>
+    <br>
+    <h1> You Win!</h1>
+  </div>
+</div>
+
+<div class="light-row">
+  <div class="light-box">
+    <a class="light light-on">
+    </a>
+  </div>
+  <div class="light-box">
+    <a class="light light-on">
+    </a>
+  </div>
+  <div class="light-box">
+    <a class="light light-on">
+    </a>
+  </div>
+  <div class="light-box">
+      <a class="light light-on">
+      </a>
+    </div>
+</div>
+
+<div class="light-row">
+  <div class="light-box">
+    <a class="light light-on">
+    </a>
+  </div>
+  <div class="light-box">
+    <a class="light light-on">
+    </a>
+  </div>
+  <div class="light-box">
+    <a class="light light-on">
+    </a>
+  </div>
+  <div class="light-box">
+      <a class="light light-on">
+      </a>
+    </div>
+</div>
+
+<div class="light-row">
+  <div class="light-box">
+    <a class="light light-on">
+    </a>
+  </div>
+  <div class="light-box">
+    <a class="light light-on">
+    </a>
+  </div>
+  <div class="light-box">
+    <a class="light light-on">
+    </a>
+  </div>
+  <div class="light-box">
+      <a class="light light-on">
+      </a>
+    </div>
+</div>
+
+<div class="light-row">
+  <div class="light-box">
+    <a class="light light-on">
+    </a>
+  </div>
+  <div class="light-box">
+    <a class="light light-on">
+    </a>
+  </div>
+  <div class="light-box">
+    <a class="light light-on">
+    </a>
+  </div>
+  <div class="light-box">
+      <a class="light light-on">
+      </a>
+    </div>
+</div>
+
+<p><br><br><br>Instructions: Turn on all of the lights to overcome the darkness.</p>
+
+<script>
+
+  const lights = document.getElementsByClassName("light");
+
+  var music = new Audio("https://static.wixstatic.com/mp3/bb5212_57fcbc68c3ae4396855fec121026094a.mp3");
+  music.loop = true;
+  music.volume = 0.3;
+  music.play();
+
+  var terra_1 = new Audio("https://static.wixstatic.com/mp3/bb5212_7ac341346c1944bab93838c3d7ffd6a1.mp3");
+  var terra_2 = new Audio("https://static.wixstatic.com/mp3/bb5212_cde45cda4c2845aa81f9d8f72ee01503.mp3");
+
+function switchLight(element) {
+  if  (element.classList.contains("clickSignal"))
+  {
+    element.classList.remove("clickSignal");
+  }
+
+  if (element.classList.contains("light-off"))
+  {
+    element.classList.remove("light-off");
+    element.classList.add("light-on");
+
+  } else if (element.classList.contains("light-on"))
+  {
+    element.classList.remove("light-on");
+    element.classList.add("light-off");
+  }
+
+  winCheck();
+}
+
+function startGame(element) {
+  // turn off black play screen
+  element.parentElement.parentElement.style.display = 'none';
+
+  // turn off randomly until on left
+  var randArray = [];
+
+  for (let i = 0; i < lights.length; i++) {
+    randArray[i] = i;
+  }
+  randArray = shuffle(randArray);
+
+  for (let i = 0; i < lights.length-1; i++) {
+    //setTimeout(switchLight(lights_mixed[i], true),2000*(i+1));
+    (function(val) {     //val is parameter
+    setTimeout(function() {
+      switchLight(lights[randArray[val]])
+    }, 500*(val+1));
+  })(i); // i is argument
+  }
+
+
+  setTimeout(function() {
+    // play naration
+    terra_1.play();
+  }, 600*.5*lights.length);
+
+  setTimeout(function() {
+    // signal to turn on light
+    lights[randArray[8]].classList.add("clickSignal");
+
+    // allow light to be switched
+    lights[randArray[8]].setAttribute("onclick","firstLight(this);");
+  }, 1400*lights.length);
+
+}
+
+function firstLight(element) {
+  // when first light is switched
+  // trun off light can be switched
+  element.removeAttribute("onclick");
+  switchLight(element);
+
+
+  // continue narration
+  terra_2.play();
+
+  setTimeout(function() {
+    // turn on ability to switch all lights
+    for (var i = 0; i < lights.length; i++) {
+      lights[i].setAttribute("onclick","switchLight(this);");
+    }
+    // turn on music
+    music.volume = 0.5;
+  }, 18000);
+
+}
+
+function shuffle(array) {
+  for (var i = array.length - 1; i > 0; i--) {
+
+       // Generate random number
+       var j = Math.floor(Math.random() * (i + 1));
+
+       var temp = array[i];
+       array[i] = array[j];
+       array[j] = temp;
+   }
+
+   return array;
+}
+
+function winCheck() {
+  var win = true;
+  for (let i = 0; i < lights.length; i++) {
+    if (lights[i].classList.contains("light-off")) {
+      win = false;
+    }
+  }
+
+  if (win == true)
+  {
+    document.getElementById("winner").style.display = 'block';
+  }
+}
+</script>
+
+</body>
+</html>
